@@ -22,6 +22,7 @@ export interface NavGroup {
 @Injectable({
   providedIn: 'root'
 })
+
 export class TutorialService {
   // Mobile drawer state
   sidebarOpen = signal<boolean>(false);
