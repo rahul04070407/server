@@ -1,0 +1,88 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🏗️</div>
+    <div>
+      <h2>7 Hands-On Enterprise Projects</h2>
+      <p class="section-subtitle">
+        From Small Business Active Directory to Hybrid Cloud Infrastructure with verified production blueprints.
+      </p>
+    </div>
+  </div>
+
+  <div class="project-pills-bar">
+    @for (proj of projects; track proj.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-gold]="selectedProjectId() === proj.id"
+        [class.btn-ghost]="selectedProjectId() !== proj.id"
+        (click)="selectProject(proj.id)">
+        Project {{ proj.id }}
+      </button>
+    }
+  </div>
+
+  @let activeProj = currentProject();
+  <div class="flip7-card accent-gold" style="margin-top: 20px;">
+    <div class="card-title-row">
+      <div>
+        <span class="badge badge-gold">{{ activeProj.badge }}</span>
+        <span class="badge badge-teal" style="margin-left: 8px;">{{ activeProj.difficulty }} Level</span>
+        <h3 style="margin-top: 8px;">{{ activeProj.title }}</h3>
+      </div>
+    </div>
+
+    <p class="lead-text" style="margin-top: 12px;">{{ activeProj.summary }}</p>
+
+    <h4 style="margin: 24px 0 8px 0;">📐 Architecture Blueprint:</h4>
+    <div class="code-terminal" style="background: #0E171E;">
+      <pre style="color: #FFD23F;"><code>{{ activeProj.architectureBlueprint }}</code></pre>
+    </div>
+
+    <h4 style="margin: 28px 0 10px 0;">🖥️ Server Roles & Resource Specifications:</h4>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Server Hostname</th>
+            <th>Operating System</th>
+            <th>IP Address</th>
+            <th>Hardware Specs</th>
+            <th>Infrastructure Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (role of activeProj.serverRoles; track role.serverName) {
+            <tr>
+              <td><strong>{{ role.serverName }}</strong></td>
+              <td><span class="badge badge-teal">{{ role.os }}</span></td>
+              <td><code>{{ role.ip }}</code></td>
+              <td>{{ role.specs }}</td>
+              <td>{{ role.role }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin: 28px 0 14px 0;">🏁 Step-by-Step Milestones & Verification:</h4>
+    @for (ms of activeProj.stepByStepMilestones; track ms.milestone) {
+      <div class="project-milestone-card">
+        <h5>{{ ms.milestone }}</h5>
+        <p style="margin: 6px 0;">{{ ms.description }}</p>
+        <div class="code-terminal">
+          <pre><code>{{ ms.keyCommands }}</code></pre>
+        </div>
+        <div class="verification-note">
+          <strong>Verification Test:</strong> {{ ms.verificationCheck }}
+        </div>
+      </div>
+    }
+
+    <h4 style="margin: 28px 0 10px 0;">🎯 Production Competency Outcomes:</h4>
+    <ul class="clean-list">
+      @for (out of activeProj.productionOutcomes; track out) {
+        <li>🏆 {{ out }}</li>
+      }
+    </ul>
+  </div>
+</section>

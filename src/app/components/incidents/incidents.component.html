@@ -1,0 +1,115 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🚨</div>
+    <div>
+      <h2>Production Incident & Outage Runbooks</h2>
+      <p class="section-subtitle">
+        13-Step systematic triage methodology: diagnostic commands, expected outputs, root cause analysis, and fixes.
+      </p>
+    </div>
+  </div>
+
+  <div class="filter-pills-bar">
+    @for (cat of incidentCategories; track cat) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-coral]="selectedIncidentCategory() === cat"
+        [class.btn-ghost]="selectedIncidentCategory() !== cat"
+        (click)="setCategory(cat)">
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <!-- Incident Selector Cards -->
+  <div class="incidents-selector-grid">
+    @for (inc of filteredIncidents(); track inc.id) {
+      <div
+        class="incident-select-card"
+        [class.active]="selectedIncident().id === inc.id"
+        (click)="selectIncident(inc)">
+        <div class="card-title-row">
+          <span class="ticket-tag">{{ inc.ticketNumber }}</span>
+          <span class="badge badge-coral">{{ inc.severity.split('-')[0] }}</span>
+        </div>
+        <h5 class="inc-card-title">{{ inc.title }}</h5>
+        <p class="inc-card-desc">{{ inc.reportedIssue }}</p>
+      </div>
+    }
+  </div>
+
+  @let activeInc = selectedIncident();
+  <div class="flip7-card accent-coral" style="margin-top: 24px;">
+    <div class="card-title-row">
+      <div>
+        <span class="badge badge-coral">{{ activeInc.severity }}</span>
+        <span class="badge badge-teal" style="margin-left: 8px;">{{ activeInc.environment }}</span>
+        <h3 style="margin-top: 8px;">{{ activeInc.ticketNumber }}: {{ activeInc.title }}</h3>
+      </div>
+    </div>
+
+    <div class="two-col-grid" style="margin-top: 14px;">
+      <div class="detail-callout callout-troubleshoot">
+        <strong>Reported Issue:</strong>
+        <p>{{ activeInc.reportedIssue }}</p>
+      </div>
+      <div class="detail-callout callout-security">
+        <strong>Business Impact:</strong>
+        <p>{{ activeInc.businessImpact }}</p>
+      </div>
+    </div>
+
+    <h4 style="margin: 28px 0 14px 0;">13-Step Systematic Diagnostic & Triage Process:</h4>
+    <div class="triage-steps-timeline">
+      @for (st of activeInc.triage13Steps; track st.stepNumber) {
+        <div class="triage-step-card">
+          <div class="triage-step-header">
+            <span class="step-num-circle">{{ st.stepNumber }}</span>
+            <div class="triage-step-titles">
+              <h5>{{ st.title }}</h5>
+              <p class="step-action">{{ st.action }}</p>
+            </div>
+          </div>
+
+          <div class="code-terminal" style="margin: 10px 0;">
+            <div class="terminal-header">
+              <span class="terminal-title">DIAGNOSTIC COMMAND</span>
+              <button
+                class="copy-btn"
+                (click)="copy(st.commands, 'inc-' + activeInc.id + '-' + st.stepNumber)">
+                {{ tutorialService.copiedSnippet() === 'inc-' + activeInc.id + '-' + st.stepNumber ? 'Copied' : 'Copy' }}
+              </button>
+            </div>
+            <pre><code>{{ st.commands }}</code></pre>
+          </div>
+
+          <div class="output-comparison-grid">
+            <div class="out-col out-normal">
+              <strong>Expected Normal Output:</strong>
+              <code>{{ st.expectedNormalOutput }}</code>
+            </div>
+            <div class="out-col out-abnormal">
+              <strong>Abnormal Output Indication:</strong>
+              <code>{{ st.abnormalOutputIndication }}</code>
+            </div>
+          </div>
+
+          <div class="interpretation-note">
+            <strong>Diagnostic Interpretation:</strong> {{ st.interpretation }}
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="rca-box" style="margin-top: 28px;">
+      <h4>📋 Root Cause Analysis (RCA):</h4>
+      <p>{{ activeInc.rootCause }}</p>
+
+      <h4 style="margin-top: 14px;">🛠️ Resolution Procedure:</h4>
+      <p>{{ activeInc.resolution }}</p>
+
+      <h4 style="margin-top: 14px;">🛡️ Permanent Prevention Measures:</h4>
+      <p>{{ activeInc.preventionMeasure }}</p>
+    </div>
+  </div>
+</section>

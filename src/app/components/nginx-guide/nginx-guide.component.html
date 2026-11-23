@@ -1,0 +1,188 @@
+<section class="tab-section">
+  <!-- Section Header -->
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🌐</div>
+    <div>
+      <h2>Web Servers & Nginx Master Guide</h2>
+      <p class="section-subtitle">
+        Understand why Nginx is essential, how it routes traffic, and explore 5 production configuration templates.
+      </p>
+    </div>
+  </div>
+
+  <!-- Topic Selector Pills -->
+  <div class="topic-pills-bar">
+    @for (t of topics; track t.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-teal]="selectedTopic().id === t.id"
+        [class.btn-ghost]="selectedTopic().id !== t.id"
+        (click)="selectTopic(t.id)">
+        {{ t.title.split('(')[0].trim() }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedTopic();
+  <div class="flip7-card">
+    <!-- Title Row -->
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">{{ active.badge }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    @if (active.analogy) {
+      <div class="concept-banner">
+        <span class="concept-icon">💡</span>
+        <div class="concept-text">
+          <strong>{{ active.analogy.title }}:</strong> {{ active.analogy.description }}
+        </div>
+      </div>
+    }
+
+    <!-- Architecture Diagram if present -->
+    @if (active.architectureDiagram) {
+      <div class="section-subheading">
+        <h4>🏛️ How Nginx Sits in Front of Applications</h4>
+      </div>
+      <div class="code-terminal" style="background: #0E171E; margin-bottom: 12px;">
+        <pre style="color: #64D2FF; font-weight: 600;"><code>{{ active.architectureDiagram }}</code></pre>
+      </div>
+    }
+
+    <!-- Comparison Table if present -->
+    @if (active.comparisonTable && active.comparisonTable.length > 0) {
+      <div class="section-subheading">
+        <h4>⚖️ Architecture Comparison: Nginx vs Apache vs Direct Node/Java</h4>
+      </div>
+      <div class="table-responsive">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Nginx</th>
+              <th>Apache</th>
+              <th>Direct Node / Java</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of active.comparisonTable; track row.feature) {
+              <tr>
+                <td><strong>{{ row.feature }}</strong></td>
+                <td><span class="tag-teal">{{ row.nginx }}</span></td>
+                <td>{{ row.apache }}</td>
+                <td><span class="tag-coral">{{ row.directNodeOrJava }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- 5 Different Types of Configurations View -->
+    @if (active.configs && active.configs.length > 0) {
+      <div class="section-subheading">
+        <h4>📁 Select Configuration Type:</h4>
+      </div>
+      <div class="config-tabs-bar">
+        @for (cfg of active.configs; track cfg.title; let i = $index) {
+          <button
+            class="config-tab-btn"
+            [class.active]="activeConfigIndex() === i"
+            (click)="selectConfig(i)">
+            <span class="tab-badge" [ngClass]="'badge-' + cfg.badgeColor">{{ cfg.badge }}</span>
+            <span class="tab-title">{{ cfg.title.split(':')[0] }}</span>
+          </button>
+        }
+      </div>
+
+      @let selectedCfg = active.configs[activeConfigIndex()];
+      <div class="config-detail-card">
+        <div class="config-header-row">
+          <div>
+            <h5>{{ selectedCfg.title }}</h5>
+            <p class="config-desc">{{ selectedCfg.purpose }}</p>
+          </div>
+          <div class="config-actions">
+            <span class="file-path-badge">{{ selectedCfg.configFile }}</span>
+            <button
+              class="btn-pill btn-sm btn-teal"
+              (click)="copy(selectedCfg.fullConfigCode, 'cfg-code-' + activeConfigIndex())">
+              {{ tutorialService.copiedSnippet() === 'cfg-code-' + activeConfigIndex() ? '✓ Copied' : 'Copy Config' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Full Config Code Box -->
+        <div class="code-terminal" style="margin: 10px 0;">
+          <pre><code>{{ selectedCfg.fullConfigCode }}</code></pre>
+        </div>
+
+        <!-- Line by Line Annotations -->
+        <div class="section-subheading">
+          <h5>🔍 Key Directives Explained</h5>
+        </div>
+        <div class="explanations-list">
+          @for (item of selectedCfg.lineByLineExplanation; track item.line) {
+            <div class="line-exp-item">
+              <code>{{ item.line }}</code>
+              <span>{{ item.explanation }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Verification Command -->
+        <div class="test-command-box">
+          <span class="cmd-label">Test Command:</span>
+          <code>{{ selectedCfg.testCommand }}</code>
+        </div>
+      </div>
+    }
+
+    <!-- CLI Commands if present -->
+    @if (active.cliCommands && active.cliCommands.length > 0) {
+      <div class="section-subheading">
+        <h4>⚡ Essential Nginx Terminal Commands</h4>
+      </div>
+      <div class="cmd-grid">
+        @for (cmd of active.cliCommands; track cmd.command; let i = $index) {
+          <div class="cmd-card">
+            <div class="cmd-top">
+              <code>{{ cmd.command }}</code>
+              <button
+                class="btn-pill btn-sm btn-ghost"
+                (click)="copy(cmd.command, 'cli-cmd-' + i)">
+                {{ tutorialService.copiedSnippet() === 'cli-cmd-' + i ? '✓ Copied' : 'Copy' }}
+              </button>
+            </div>
+            <p class="cmd-purpose"><strong>Purpose:</strong> {{ cmd.purpose }}</p>
+            <p class="cmd-when"><strong>When to use:</strong> {{ cmd.whenToUse }}</p>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Troubleshooting Real Errors -->
+    @if (active.troubleshooting && active.troubleshooting.length > 0) {
+      <div class="section-subheading">
+        <h4>🚨 Diagnosing Real Nginx Errors (502, 403, 404, 413)</h4>
+      </div>
+      <div class="troubleshoot-grid">
+        @for (err of active.troubleshooting; track err.errorCode) {
+          <div class="error-card">
+            <div class="error-header">
+              <span class="badge badge-coral">{{ err.errorCode }}</span>
+            </div>
+            <p><strong>Cause:</strong> {{ err.cause }}</p>
+            <p><strong>Fix:</strong> {{ err.solution }}</p>
+            <div class="diag-cmd">
+              <span>Inspect:</span>
+              <code>{{ err.diagnosticCommand }}</code>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

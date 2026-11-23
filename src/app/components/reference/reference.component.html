@@ -1,0 +1,141 @@
+<section class="tab-section">
+  <!-- Section Header -->
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">📑</div>
+    <div>
+      <h2>Cheatsheet, Troubleshooting & Glossary</h2>
+      <p class="section-subtitle">
+        Fast lookup command reference, step-by-step error resolutions, and plain-English keyword definitions.
+      </p>
+    </div>
+  </div>
+
+  <!-- Subtab Selector Bar -->
+  <div class="subtab-bar">
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-teal]="activeTab() === 'cheatsheet'"
+      [class.btn-ghost]="activeTab() !== 'cheatsheet'"
+      (click)="activeTab.set('cheatsheet')">
+      📋 Cheatsheet
+    </button>
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-teal]="activeTab() === 'troubleshooting'"
+      [class.btn-ghost]="activeTab() !== 'troubleshooting'"
+      (click)="activeTab.set('troubleshooting')">
+      🔧 Troubleshooting Runbooks
+    </button>
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-teal]="activeTab() === 'glossary'"
+      [class.btn-ghost]="activeTab() !== 'glossary'"
+      (click)="activeTab.set('glossary')">
+      📚 Keyword Glossary (A to Z)
+    </button>
+  </div>
+
+  <!-- VIEW 1: CHEATSHEET -->
+  @if (activeTab() === 'cheatsheet') {
+    <div class="cheatsheet-grid">
+      @for (card of cheatsheet; track card.category) {
+        <div class="flip7-card cheatsheet-card">
+          <div class="card-header-bar">
+            <span class="badge" [ngClass]="'badge-' + card.badgeColor">{{ card.category }}</span>
+          </div>
+          <div class="commands-list">
+            @for (c of card.commands; track c.cmd; let idx = $index) {
+              <div class="cmd-item">
+                <div class="cmd-line">
+                  <code>{{ c.cmd }}</code>
+                  <button
+                    class="btn-pill btn-sm btn-ghost"
+                    (click)="copy(c.cmd, card.category + '-' + idx)">
+                    {{ tutorialService.copiedSnippet() === (card.category + '-' + idx) ? '✓' : 'Copy' }}
+                  </button>
+                </div>
+                <span class="cmd-desc">{{ c.desc }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- VIEW 2: TROUBLESHOOTING RUNBOOKS -->
+  @if (activeTab() === 'troubleshooting') {
+    <div class="troubleshooting-stack">
+      @for (item of troubleshooting; track item.title; let idx = $index) {
+        <div class="flip7-card error-card">
+          <div class="error-title-row">
+            <span class="badge badge-coral">❌ {{ item.title }}</span>
+          </div>
+
+          <div class="analogy-callout">
+            <span class="callout-icon">💡</span>
+            <span><strong>Intuition:</strong> {{ item.analogy }}</span>
+          </div>
+
+          <div class="error-body-grid">
+            <div class="error-cause">
+              <strong>Root Cause:</strong>
+              <p>{{ item.cause }}</p>
+            </div>
+            <div class="error-fix">
+              <strong>Exact Solution:</strong>
+              <p>{{ item.solution }}</p>
+            </div>
+          </div>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <span>Diagnostic & Verification Commands</span>
+              <button
+                class="btn-pill btn-sm btn-ghost"
+                (click)="copy(item.checkCommands, 'err-cmd-' + idx)">
+                {{ tutorialService.copiedSnippet() === 'err-cmd-' + idx ? '✓ Copied' : 'Copy Commands' }}
+              </button>
+            </div>
+            <pre><code>{{ item.checkCommands }}</code></pre>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- VIEW 3: KEYWORD GLOSSARY -->
+  @if (activeTab() === 'glossary') {
+    <div class="glossary-wrapper">
+      <div class="glossary-search-row">
+        <input
+          type="text"
+          class="input-cream"
+          placeholder="Filter keywords (e.g. Nginx, Port, SSH, DNS)..."
+          [value]="glossarySearch()"
+          (input)="glossarySearch.set($any($event.target).value)" />
+        <span class="counter-badge">{{ filteredGlossary().length }} keywords</span>
+      </div>
+
+      <div class="glossary-grid">
+        @for (item of filteredGlossary(); track item.keyword) {
+          <div class="flip7-card glossary-card">
+            <div class="glossary-top">
+              <h5>{{ item.keyword }}</h5>
+              <span class="tag-category">{{ item.category }}</span>
+            </div>
+            <p class="glossary-def">{{ item.definition }}</p>
+            <div class="glossary-analogy">
+              <span class="mini-icon">💡</span>
+              <span><strong>Analogy:</strong> {{ item.analogy }}</span>
+            </div>
+            <div class="glossary-example">
+              <span class="ex-label">Example:</span>
+              <code>{{ item.example }}</code>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>

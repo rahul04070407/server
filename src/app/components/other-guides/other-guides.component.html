@@ -1,0 +1,127 @@
+<section class="tab-section">
+  <!-- Section Header -->
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🖥️</div>
+    <div>
+      <h2>Other Server Type Guides</h2>
+      <p class="section-subtitle">
+        Deep dives into Windows Server & IIS, Database Servers, and Firewall Network Security.
+      </p>
+    </div>
+  </div>
+
+  <!-- Topic Selector Pills -->
+  <div class="topic-pills-bar">
+    @for (t of topics; track t.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-teal]="selectedTopic().id === t.id"
+        [class.btn-ghost]="selectedTopic().id !== t.id"
+        (click)="selectTopic(t.id)">
+        {{ t.title.split('Guide')[0].trim() }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedTopic();
+  <div class="flip7-card">
+    <!-- Title Row -->
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">{{ active.badge }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    <div class="concept-banner">
+      <span class="concept-icon">💡</span>
+      <div class="concept-text">
+        <strong>{{ active.analogy.title }}:</strong> {{ active.analogy.description }}
+      </div>
+    </div>
+
+    <!-- Core Takeaways -->
+    <div class="section-subheading">
+      <h4>🎯 Core Architectural Takeaways</h4>
+    </div>
+    <ul class="clean-bullet-list">
+      @for (point of active.keyTakeaways; track point) {
+        <li>{{ point }}</li>
+      }
+    </ul>
+
+    <!-- Explanation Cards with Code / Diagrams in Responsive Multi-column Grid -->
+    <div class="explanation-grid">
+      @for (card of active.explanationCards; track card.title) {
+        <div class="sub-card">
+          <h5>{{ card.title }}</h5>
+          <p>{{ card.description }}</p>
+          @if (card.diagram) {
+            <div class="code-terminal">
+              <pre><code>{{ card.diagram }}</code></pre>
+            </div>
+          }
+          @if (card.codeExample) {
+            <div class="code-terminal">
+              <pre><code>{{ card.codeExample }}</code></pre>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Quick Reference Cheat Sheet Table -->
+    @if (active.quickCheatSheet && active.quickCheatSheet.length > 0) {
+      <div class="section-subheading">
+        <h4>📋 Quick Reference</h4>
+      </div>
+      <div class="table-responsive">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Term / Port</th>
+              <th>Meaning</th>
+              <th>Real Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of active.quickCheatSheet; track row.term) {
+              <tr>
+                <td><strong>{{ row.term }}</strong></td>
+                <td>{{ row.simpleMeaning }}</td>
+                <td><code>{{ row.example }}</code></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- Try It Yourself Commands in Responsive Grid -->
+    @if (active.tryItYourselfCommands && active.tryItYourselfCommands.length > 0) {
+      <div class="section-subheading">
+        <h4>🧪 Verify in Terminal</h4>
+      </div>
+      <div class="cmd-grid">
+        @for (cmd of active.tryItYourselfCommands; track cmd.command; let i = $index) {
+          <div class="cmd-try-card">
+            <div class="cmd-header-bar">
+              <strong>{{ cmd.whatItDoes }}</strong>
+              <button
+                class="btn-pill btn-sm btn-ghost"
+                (click)="copy(cmd.command, 'other-cmd-' + i)">
+                {{ tutorialService.copiedSnippet() === 'other-cmd-' + i ? '✓ Copied' : 'Copy' }}
+              </button>
+            </div>
+            <div class="code-terminal">
+              <pre><code>{{ cmd.command }}</code></pre>
+            </div>
+            <div class="output-preview">
+              <span class="out-label">Output:</span>
+              <code>{{ cmd.expectedOutput }}</code>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

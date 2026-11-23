@@ -1,0 +1,100 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">⚙️</div>
+    <div>
+      <h2>Server Hardware & Software Components</h2>
+      <p class="section-subtitle">
+        Understand what parts make up a production server (CPU cores, ECC RAM, NVMe RAID, NICs) and how Linux vs Windows Server differ.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic-pills-bar">
+    @for (t of topics; track t.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-gold]="selectedTopic().id === t.id"
+        [class.btn-ghost]="selectedTopic().id !== t.id"
+        (click)="selectTopic(t.id)">
+        {{ t.title.split(':')[0] }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedTopic();
+  <div class="flip7-card">
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">{{ active.badge }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    @if (active.analogy) {
+      <div class="concept-banner">
+        <span class="concept-icon">💡</span>
+        <div class="concept-text">
+          <strong>{{ active.analogy.title }}:</strong> {{ active.analogy.description }}
+        </div>
+      </div>
+    }
+
+    <!-- Key Takeaways -->
+    <div class="takeaways-box">
+      <strong>🎯 Key Architectural Insights:</strong>
+      <ul class="clean-list">
+        @for (item of active.keyTakeaways; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </div>
+
+    <!-- Hardware Cards Grid (if present) -->
+    @if (active.hardwareCards && active.hardwareCards.length > 0) {
+      <div class="section-subheading">
+        <h4>🖥️ Physical Component Breakdown</h4>
+      </div>
+      <div class="hardware-grid">
+        @for (hw of active.hardwareCards; track hw.component) {
+          <div class="hw-card">
+            <div class="hw-top">
+              <span class="hw-icon">{{ hw.icon }}</span>
+              <h5>{{ hw.component }}</h5>
+            </div>
+            <p><strong>Role in Server:</strong> {{ hw.functionInServer }}</p>
+            <p><strong>Why It Matters:</strong> {{ hw.whyItMatters }}</p>
+            <div class="hw-standard-pill">
+              <span>Standard:</span> {{ hw.specStandard }}
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Side by Side OS / Architecture Comparison Table -->
+    @if (active.comparisons) {
+      <div class="section-subheading">
+        <h4>⚖️ Side-by-Side Comparison: {{ active.comparisons.itemA }} vs {{ active.comparisons.itemB }}</h4>
+      </div>
+      <div class="table-responsive">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>{{ active.comparisons.itemA }}</th>
+              <th>{{ active.comparisons.itemB }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of active.comparisons.aspects; track row.feature) {
+              <tr>
+                <td><strong>{{ row.feature }}</strong></td>
+                <td><span class="tag-teal">{{ row.a }}</span></td>
+                <td>{{ row.b }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>

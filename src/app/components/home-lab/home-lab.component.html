@@ -1,0 +1,86 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🏠</div>
+    <div>
+      <h2>Complete Home Lab Architecture & Host Setup</h2>
+      <p class="section-subtitle">
+        Turn your personal machine into an enterprise virtualization host running Active Directory, Linux servers, databases, and routers.
+      </p>
+    </div>
+  </div>
+
+  <!-- Sizing Tier Pills -->
+  <div class="lab-tier-selector">
+    @for (tier of labTiers; track tier.name; let i = $index) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-gold]="selectedTierIndex() === i"
+        [class.btn-ghost]="selectedTierIndex() !== i"
+        (click)="selectTier(i)">
+        {{ tier.name.split('(')[0].trim() }}
+      </button>
+    }
+  </div>
+
+  @let activeLab = labTiers[selectedTierIndex()];
+  <div class="flip7-card">
+    <div class="lab-spec-header">
+      <div>
+        <h3>{{ activeLab.name }}</h3>
+        <p class="text-muted">{{ activeLab.suitability }}</p>
+      </div>
+      <div class="lab-badges">
+        <span class="badge badge-teal">💾 {{ activeLab.ram }}</span>
+        <span class="badge badge-gold">⚡ {{ activeLab.cpu }}</span>
+        <span class="badge badge-coral">💽 {{ activeLab.storage }}</span>
+        <span class="badge badge-sky">🖥️ {{ activeLab.hypervisor }}</span>
+      </div>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    <div class="concept-banner">
+      <span class="concept-icon">💡</span>
+      <div class="concept-text">
+        <strong>{{ activeLab.analogy }}</strong>
+      </div>
+    </div>
+
+    <div class="section-subheading">
+      <h4>Virtual Machine Sizing & Allocation Blueprint</h4>
+    </div>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>VM Identifier</th>
+            <th>Operating System</th>
+            <th>Allocated RAM</th>
+            <th>vCPU Cores</th>
+            <th>Infrastructure Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (vm of activeLab.vmAllocation; track vm.vm) {
+            <tr>
+              <td><strong>{{ vm.vm }}</strong></td>
+              <td><span class="badge badge-teal">{{ vm.os }}</span></td>
+              <td>{{ vm.ram }}</td>
+              <td>{{ vm.vcpu }}</td>
+              <td>{{ vm.role }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="target-box" style="margin-top: 14px;">
+      <strong>🎯 Host Setup Golden Rules:</strong>
+      <ul class="clean-list" style="margin-top: 6px;">
+        <li>Always reserve at least 6 GB to 8 GB RAM exclusively for the host Windows operating system so your PC remains responsive.</li>
+        <li>Enable CPU Virtualization (Intel VT-x or AMD-V) in your computer's BIOS/UEFI settings before launching VMs.</li>
+        <li>Store VM virtual disks (.vhdx or .vmdk) on an SSD. Running multiple virtual machines on a mechanical hard drive will bottleneck I/O.</li>
+        <li>Use Internal or Private virtual switches to network the VMs together without exposing lab test traffic to your home Wi-Fi.</li>
+      </ul>
+    </div>
+  </div>
+</section>

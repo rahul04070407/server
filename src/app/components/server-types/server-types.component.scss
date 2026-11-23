@@ -1,0 +1,225 @@
+.filter-pills-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.servers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.server-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  .server-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .server-id-badge {
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  }
+
+  .server-card-name {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+
+  .server-card-purpose {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .server-ports-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+
+    .port-tag {
+      background: var(--surface-base);
+      border: 1px solid rgba(43, 168, 162, 0.2);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary-dark);
+    }
+  }
+
+  .card-footer-cta {
+    border-top: 1px dashed rgba(43, 168, 162, 0.25);
+    padding-top: 10px;
+
+    .view-detail-link {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--primary-teal);
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 23, 30, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
+
+  .modal-container {
+    max-width: 850px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #FFFFFF;
+    position: relative;
+    padding: clamp(16px, 4vw, 24px);
+
+    @media (max-width: 600px) {
+      padding: 14px 12px;
+      border-radius: var(--radius-md);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px dashed rgba(43, 168, 162, 0.25);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+
+      .server-id-badge {
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: var(--primary-teal);
+      }
+
+      h3 {
+        margin: 4px 0 6px 0;
+      }
+    }
+
+    .close-modal-btn {
+      background: var(--surface-base);
+      border: 2px solid var(--primary-dark);
+      color: var(--primary-dark);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: var(--transition-bounce);
+
+      &:hover {
+        background: var(--coral);
+        color: #fff;
+        border-color: var(--coral-dark);
+        transform: rotate(90deg);
+      }
+    }
+
+    .modal-info-block {
+      margin-bottom: 18px;
+
+      strong {
+        display: block;
+        font-size: 0.95rem;
+        color: var(--primary-dark);
+        margin-bottom: 4px;
+      }
+    }
+
+    .ports-list-modal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .port-tag-lg {
+        background: var(--primary-bg);
+        border: 1px solid var(--primary-teal);
+        padding: 4px 10px;
+        border-radius: var(--radius-round);
+        font-weight: 700;
+        font-size: 0.84rem;
+        color: var(--primary-dark);
+      }
+    }
+  }
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-callout {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &.callout-security {
+    background: #FEECE7;
+    border: 1px solid var(--coral);
+    color: #6C2210;
+  }
+
+  &.callout-troubleshoot {
+    background: #FFF8E7;
+    border: 1px solid var(--accent-dark);
+    color: #554100;
+  }
+
+  &.callout-comm {
+    background: var(--primary-bg);
+    border: 1px solid var(--primary-teal);
+    color: var(--primary-dark);
+  }
+}

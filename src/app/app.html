@@ -1,0 +1,52 @@
+<div class="app-layout">
+  <!-- Side Navigation Drawer (Fixed on desktop, slide-in drawer on mobile) -->
+  <app-side-nav></app-side-nav>
+
+  <!-- Main Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Modular Top Navigation Bar with Mobile Drawer Hamburger -->
+    <app-header></app-header>
+
+    <!-- Dynamic Main Content Section View -->
+    <main class="main-body">
+      @switch (tutorialService.activeSection()) {
+        @case ('foundations') {
+          <app-server-foundations></app-server-foundations>
+        }
+        @case ('components') {
+          <app-server-components></app-server-components>
+        }
+        @case ('nginx-guide') {
+          <app-nginx-guide></app-nginx-guide>
+        }
+        @case ('other-guides') {
+          <app-other-guides></app-other-guides>
+        }
+        @case ('setup-guide') {
+          <app-server-setup></app-server-setup>
+        }
+        @case ('performance') {
+          <app-performance></app-performance>
+        }
+        @case ('scalability') {
+          <app-scalability></app-scalability>
+        }
+        @case ('reference') {
+          <app-reference></app-reference>
+        }
+        @case ('home-lab') {
+          <app-home-lab></app-home-lab>
+        }
+      }
+    </main>
+
+    <!-- Modular Footer -->
+    <app-footer></app-footer>
+  </div>
+
+  <!-- Mobile Floating Thumb Action Button for Fast Topic Switching -->
+  <button class="mobile-topics-fab" (click)="tutorialService.toggleSidebar()" aria-label="Open Topics Menu">
+    <span class="fab-icon">☰</span>
+    <span class="fab-label">Topics</span>
+  </button>
+</div>

@@ -1,0 +1,26 @@
+<header class="top-nav-bar">
+  <div class="top-nav-inner">
+    <!-- Left: Hamburger button for Mobile / Tablet -->
+    <div class="left-actions">
+      <button
+        class="btn-pill btn-sm btn-teal toggle-btn"
+        (click)="toggleSidebar()"
+        aria-label="Toggle Topic Navigation">
+        <span class="icon-burger">☰</span>
+        <span class="menu-label">Topics</span>
+      </button>
+
+      <!-- Breadcrumb badge of current section -->
+      <span class="current-section-pill">
+        {{ getActiveSectionTitle() }}
+      </span>
+    </div>
+
+    <!-- Center/Right Branding -->
+    <div class="right-brand">
+      <div class="retro-brand-ribbon">
+        <span class="brand-text">SERVER ADMIN TUTORIAL</span>
+      </div>
+    </div>
+  </div>
+</header>

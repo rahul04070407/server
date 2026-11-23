@@ -1,0 +1,161 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">⚡</div>
+    <div>
+      <h2>Automation, Scripting & Hardening Baselines</h2>
+      <p class="section-subtitle">
+        Production PowerShell, Bash, Python scripts, CIS benchmarks, and ITIL documentation templates.
+      </p>
+    </div>
+  </div>
+
+  <div class="subtab-selector-bar">
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-teal]="selectedAutomationTab() === 'scripts'"
+      [class.btn-ghost]="selectedAutomationTab() !== 'scripts'"
+      (click)="setSubTab('scripts')">
+      📜 Production Scripts
+    </button>
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-coral]="selectedAutomationTab() === 'hardening'"
+      [class.btn-ghost]="selectedAutomationTab() !== 'hardening'"
+      (click)="setSubTab('hardening')">
+      🔒 CIS Hardening Baselines
+    </button>
+    <button
+      class="btn-pill btn-sm"
+      [class.btn-gold]="selectedAutomationTab() === 'templates'"
+      [class.btn-ghost]="selectedAutomationTab() !== 'templates'"
+      (click)="setSubTab('templates')">
+      📋 Enterprise Doc Templates
+    </button>
+  </div>
+
+  <!-- Subtab 1: Production Scripts -->
+  @if (selectedAutomationTab() === 'scripts') {
+    <div class="script-pills-bar" style="margin-top: 16px;">
+      @for (sc of scripts; track sc.id) {
+        <button
+          class="btn-pill btn-sm"
+          [class.btn-teal]="selectedScript().id === sc.id"
+          [class.btn-ghost]="selectedScript().id !== sc.id"
+          (click)="selectScript(sc)">
+          {{ sc.language }}: {{ sc.name.split(' ')[0] }}
+        </button>
+      }
+    </div>
+
+    @let activeSc = selectedScript();
+    <div class="flip7-card accent-teal" style="margin-top: 20px;">
+      <div class="card-title-row">
+        <div>
+          <span class="badge badge-teal">{{ activeSc.language }}</span>
+          <h3 style="margin-top: 6px;">{{ activeSc.name }}</h3>
+        </div>
+        <button
+          class="btn-pill btn-sm btn-teal"
+          (click)="copy(activeSc.code, 'script-' + activeSc.id)">
+          {{ tutorialService.copiedSnippet() === 'script-' + activeSc.id ? '✓ Copied' : '📋 Copy Full Script' }}
+        </button>
+      </div>
+
+      <p class="lead-text" style="margin-top: 10px;">{{ activeSc.purpose }}</p>
+      <p><strong>Required Permissions:</strong> {{ activeSc.requiredPermissions }}</p>
+
+      <div class="code-terminal" style="margin: 16px 0;">
+        <div class="terminal-header">
+          <span class="terminal-title">{{ activeSc.language.toUpperCase() }} SCRIPT</span>
+          <button
+            class="copy-btn"
+            (click)="copy(activeSc.code, 'script-' + activeSc.id)">
+            Copy
+          </button>
+        </div>
+        <pre><code>{{ activeSc.code }}</code></pre>
+      </div>
+
+      <h4 style="margin: 20px 0 10px 0;">Line-by-Line Technical Breakdown:</h4>
+      <div class="breakdown-grid">
+        @for (line of activeSc.lineByLineExplanation; track line.lineRange) {
+          <div class="breakdown-item">
+            <span class="line-badge">{{ line.lineRange }}</span>
+            <p>{{ line.explanation }}</p>
+          </div>
+        }
+      </div>
+
+      <div class="safe-guide-box" style="margin-top: 18px;">
+        <strong>🛡️ Safe Execution Guide:</strong>
+        <p>{{ activeSc.safeExecutionGuide }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- Subtab 2: CIS Hardening Baselines -->
+  @if (selectedAutomationTab() === 'hardening') {
+    <div class="hardening-container" style="margin-top: 20px;">
+      @for (base of hardeningBaselines; track base.title) {
+        <div class="flip7-card accent-coral" style="margin-bottom: 24px;">
+          <div class="card-title-row">
+            <div>
+              <span class="badge badge-coral">{{ base.targetOS }}</span>
+              <h3 style="margin-top: 6px;">{{ base.title }}</h3>
+            </div>
+            <span class="badge badge-teal">{{ base.benchmark }}</span>
+          </div>
+
+          <div class="table-responsive" style="margin-top: 16px;">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Security Parameter</th>
+                  <th>Recommended Setting</th>
+                  <th>Security Justification</th>
+                  <th>Remediation Command</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of base.rules; track r.parameter) {
+                  <tr>
+                    <td><strong>{{ r.parameter }}</strong></td>
+                    <td><code>{{ r.recommendedValue }}</code></td>
+                    <td>{{ r.justification }}</td>
+                    <td><code>{{ r.command }}</code></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Subtab 3: Enterprise Documentation Templates -->
+  @if (selectedAutomationTab() === 'templates') {
+    <div class="templates-container" style="margin-top: 20px;">
+      @for (tpl of docTemplates; track tpl.id) {
+        <div class="flip7-card accent-gold" style="margin-bottom: 24px;">
+          <div class="card-title-row">
+            <div>
+              <span class="badge badge-gold">{{ tpl.category }}</span>
+              <h3 style="margin-top: 6px;">{{ tpl.title }}</h3>
+            </div>
+            <button
+              class="btn-pill btn-sm btn-gold"
+              (click)="copy(tpl.templateMarkdown, 'tpl-' + tpl.id)">
+              {{ tutorialService.copiedSnippet() === 'tpl-' + tpl.id ? '✓ Copied' : '📋 Copy Markdown Template' }}
+            </button>
+          </div>
+          <p class="text-muted">{{ tpl.purpose }}</p>
+
+          <div class="code-terminal" style="margin-top: 14px;">
+            <pre><code>{{ tpl.templateMarkdown }}</code></pre>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,114 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">⚡</div>
+    <div>
+      <h2>Server Performance & Bottlenecks</h2>
+      <p class="section-subtitle">
+        Understand how to measure server health, track CPU Load, RAM Memory/Swap, Disk IOPS, and run instant diagnostics when servers slow down.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic-pills-bar">
+    @for (t of topics; track t.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-coral]="selectedTopic().id === t.id"
+        [class.btn-ghost]="selectedTopic().id !== t.id"
+        (click)="selectTopic(t.id)">
+        {{ t.title.split('&')[0] }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedTopic();
+  <div class="flip7-card">
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">{{ active.badge }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    @if (active.analogy) {
+      <div class="concept-banner">
+        <span class="concept-icon">💡</span>
+        <div class="concept-text">
+          <strong>{{ active.analogy.title }}:</strong> {{ active.analogy.description }}
+        </div>
+      </div>
+    }
+
+    <p class="headline-text">{{ active.headline }}</p>
+
+    <!-- Metrics Table (if present) -->
+    @if (active.metrics && active.metrics.length > 0) {
+      <div class="section-subheading">
+        <h4>📊 The 4 Vital Hardware Resources & Bottleneck Thresholds</h4>
+      </div>
+      <div class="table-responsive">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Resource Metric</th>
+              <th>Normal Healthy Range</th>
+              <th>Critical Danger Zone</th>
+              <th>What It Means</th>
+              <th>Diagnostic Command</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of active.metrics; track m.name) {
+              <tr>
+                <td><strong>{{ m.name }}</strong></td>
+                <td><span class="badge badge-teal">{{ m.normalRange }}</span></td>
+                <td><span class="badge badge-coral">{{ m.dangerRange }}</span></td>
+                <td>{{ m.whatItMeasures }}</td>
+                <td><code>{{ m.diagnosticCommand }}</code></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- Diagnostic Tools Grid (if present) -->
+    @if (active.tools && active.tools.length > 0) {
+      <div class="section-subheading">
+        <h4>🛠️ Essential System Diagnostic Utilities</h4>
+      </div>
+      <div class="tools-grid">
+        @for (t of active.tools; track t.tool) {
+          <div class="tool-card">
+            <div class="tool-header">
+              <h5>{{ t.tool }}</h5>
+              <button
+                class="btn-pill btn-sm btn-ghost"
+                (click)="copy(t.command, 'perf-cmd-' + t.tool)">
+                {{ tutorialService.copiedSnippet() === 'perf-cmd-' + t.tool ? '✓ Copied' : 'Copy' }}
+              </button>
+            </div>
+            <p>{{ t.description }}</p>
+            <div class="code-terminal">
+              <pre><code>{{ t.sampleOutput }}</code></pre>
+            </div>
+            <div class="interpretation-box">
+              <strong>How to interpret:</strong> {{ t.interpretation }}
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Quick Wins Checklist (if present) -->
+    @if (active.quickWins && active.quickWins.length > 0) {
+      <div class="quick-wins-box" style="margin-top: 14px;">
+        <strong>🚀 Immediate Remediation Playbook:</strong>
+        <ul class="clean-list" style="margin-top: 6px;">
+          @for (win of active.quickWins; track win) {
+            <li>{{ win }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</section>
