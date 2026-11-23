@@ -1,0 +1,146 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🏛️</div>
+    <div>
+      <h2>12 Real-World Infrastructure Architectures</h2>
+      <p class="section-subtitle">
+        Enterprise blueprints: topology diagrams, role mapping, port matrices, data flows, and failover designs.
+      </p>
+    </div>
+  </div>
+
+  <!-- Architecture Switcher Pills -->
+  <div class="architecture-pills-bar">
+    @for (arch of architectures; track arch.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-coral]="selectedArchitecture().id === arch.id"
+        [class.btn-ghost]="selectedArchitecture().id !== arch.id"
+        (click)="selectArchitecture(arch)">
+        {{ arch.id }}. {{ arch.title.split('(')[0] }}
+      </button>
+    }
+  </div>
+
+  @let activeArch = selectedArchitecture();
+  <div class="flip7-card accent-coral" style="margin-top: 20px;">
+    <div class="card-title-row">
+      <div>
+        <span class="badge badge-coral">{{ activeArch.badge }}</span>
+        <h3 style="margin-top: 6px;">{{ activeArch.title }}</h3>
+      </div>
+      <div class="cost-estimate-pill">Resource Profile: {{ activeArch.costAndResourceReqs }}</div>
+    </div>
+    <p class="lead-text" style="margin-top: 12px;">{{ activeArch.summary }}</p>
+
+    <div class="target-box" style="margin-top: 14px;">
+      <strong>🏢 When Companies Use It:</strong>
+      <p style="margin: 4px 0 0 0;">{{ activeArch.whenCompaniesUseIt }}</p>
+    </div>
+
+    <!-- ASCII Architecture Diagram Container -->
+    <h4 style="margin: 24px 0 8px 0;">📐 Topology Diagram:</h4>
+    <div class="code-terminal" style="background: #0E171E;">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="dot-coral"></span>
+          <span class="dot-gold"></span>
+          <span class="dot-teal"></span>
+        </div>
+        <span class="terminal-title">ARCHITECTURE TOPOLOGY // {{ activeArch.title }}</span>
+      </div>
+      <pre style="color: #64D2FF; font-weight: 600;"><code>{{ activeArch.asciiDiagram }}</code></pre>
+    </div>
+
+    <!-- Pros and Cons -->
+    <div class="two-col-grid" style="margin-top: 20px;">
+      <div class="pro-con-box pro-box">
+        <h4>✅ Advantages</h4>
+        <ul class="clean-list">
+          @for (adv of activeArch.advantages; track adv) {
+            <li>✔️ {{ adv }}</li>
+          }
+        </ul>
+      </div>
+      <div class="pro-con-box con-box">
+        <h4>⚠️ Disadvantages & Engineering Constraints</h4>
+        <ul class="clean-list">
+          @for (dis of activeArch.disadvantages; track dis) {
+            <li>❌ {{ dis }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Topology Nodes Table -->
+    <h4 style="margin: 28px 0 10px 0;">🖥️ Server Roles & Network Specifications:</h4>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Node Hostname</th>
+            <th>Operating System</th>
+            <th>IP Address / Subnet</th>
+            <th>Listening Ports</th>
+            <th>Infrastructure Function</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (node of activeArch.topologyNodes; track node.name) {
+            <tr>
+              <td><strong>{{ node.name }}</strong></td>
+              <td><span class="badge badge-teal">{{ node.os }}</span></td>
+              <td><code>{{ node.ip }}</code></td>
+              <td><code>{{ node.ports }}</code></td>
+              <td>{{ node.role }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Data Flow Sequence -->
+    <h4 style="margin: 28px 0 10px 0;">🔄 End-to-End Transaction Data Flow:</h4>
+    <div class="dataflow-steps-container">
+      @for (flow of activeArch.dataFlow; track flow; let idx = $index) {
+        <div class="flow-step-item">
+          <span class="flow-step-number">{{ idx + 1 }}</span>
+          <span class="flow-step-text">{{ flow }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Firewall Port Matrix -->
+    <h4 style="margin: 28px 0 10px 0;">🛡️ Required Firewall Rules:</h4>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Port / Protocol</th>
+            <th>Action</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rule of activeArch.firewallRules; track rule.port) {
+            <tr>
+              <td><code>{{ rule.source }}</code></td>
+              <td><code>{{ rule.destination }}</code></td>
+              <td><code>{{ rule.port }}</code></td>
+              <td><span class="badge" [class.badge-teal]="rule.action === 'ALLOW'" [class.badge-coral]="rule.action === 'DENY'">{{ rule.action }}</span></td>
+              <td>{{ rule.purpose }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Failover Strategy -->
+    <div class="failover-box" style="margin-top: 24px;">
+      <strong>⚡ High Availability & Failover Strategy:</strong>
+      <p>{{ activeArch.failoverStrategy }}</p>
+    </div>
+  </div>
+</section>

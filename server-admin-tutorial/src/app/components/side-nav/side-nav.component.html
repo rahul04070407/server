@@ -1,0 +1,90 @@
+<!-- Mobile Backdrop Overlay -->
+@if (tutorialService.sidebarOpen()) {
+  <div class="drawer-backdrop" (click)="close()"></div>
+}
+
+<!-- Sidebar Drawer -->
+<aside class="sidebar-drawer" [class.drawer-open]="tutorialService.sidebarOpen()">
+  <!-- Sidebar Header Branding -->
+  <div class="sidebar-header">
+    <div class="sidebar-brand-box">
+      <div class="skew-badge">
+        <span class="brand-title">SRV-ADMIN</span>
+        <span class="brand-sub">DOCS</span>
+      </div>
+    </div>
+    <button class="mobile-close-btn" (click)="close()" aria-label="Close Navigation">✕</button>
+  </div>
+
+  <!-- Search Filter Input (Cream surface) & Quick Actions -->
+  <div class="sidebar-search">
+    <div class="search-input-wrap">
+      <input
+        type="text"
+        class="input-cream side-search-input"
+        placeholder="Filter all topics..."
+        [(ngModel)]="searchFilter"
+      />
+      @if (searchFilter) {
+        <button class="clear-btn" (click)="searchFilter = ''" aria-label="Clear filter">✕</button>
+      }
+    </div>
+
+    <!-- Dropdown Controls: Expand/Collapse All -->
+    <div class="accordion-quick-actions">
+      <button type="button" class="btn-quick-toggle" (click)="expandAll()">Expand All</button>
+      <span class="dot-separator">•</span>
+      <button type="button" class="btn-quick-toggle" (click)="collapseAll()">Collapse All</button>
+    </div>
+  </div>
+
+  <!-- Nav Topic Groups Dropdown Accordion Navigation -->
+  <nav class="sidebar-nav">
+    @for (group of filteredGroups; track group.sectionId) {
+      <div class="nav-group-block" [class.group-active]="tutorialService.activeSection() === group.sectionId">
+        <!-- Dropdown Accordion Header Button -->
+        <button
+          type="button"
+          class="group-header-btn"
+          [class.expanded]="isGroupOpen(group.sectionId)"
+          (click)="toggleGroup(group.sectionId)"
+          [attr.aria-expanded]="isGroupOpen(group.sectionId)">
+          <div class="group-header-left">
+            <span class="group-icon">{{ group.icon }}</span>
+            <span class="group-title">{{ group.title }}</span>
+          </div>
+
+          <div class="group-header-right">
+            @if (group.badgeCount) {
+              <span class="group-badge">{{ group.badgeCount }}</span>
+            }
+            <span class="chevron-arrow" [class.chevron-open]="isGroupOpen(group.sectionId)">▾</span>
+          </div>
+        </button>
+
+        <!-- Dropdown Menu Body: Topic Items -->
+        @if (isGroupOpen(group.sectionId)) {
+          <ul class="topic-list dropdown-content">
+            @for (topic of group.topics; track topic.id) {
+              <li>
+                <button
+                  type="button"
+                  class="topic-btn"
+                  [class.active]="tutorialService.activeSection() === group.sectionId && tutorialService.activeTopicId() === topic.id"
+                  (click)="onSelect(group.sectionId, topic.id)">
+                  <span class="topic-dot"></span>
+                  <span class="topic-label">{{ topic.label }}</span>
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    }
+  </nav>
+
+  <!-- Sidebar Footer Note -->
+  <div class="sidebar-footer">
+    <span class="footer-note">⚡ Production Server Reference</span>
+  </div>
+</aside>

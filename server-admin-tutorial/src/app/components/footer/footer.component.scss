@@ -1,0 +1,39 @@
+.app-footer {
+  background: var(--surface-card);
+  border-top: 3px dashed rgba(43, 168, 162, 0.3);
+  padding: 32px 24px;
+  margin-top: 48px;
+
+  .footer-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    font-weight: 900;
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    color: var(--primary-dark);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .footer-tag {
+      background: var(--surface-base);
+      border: 1px solid rgba(43, 168, 162, 0.25);
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-round);
+    }
+  }
+}

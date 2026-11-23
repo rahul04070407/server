@@ -1,0 +1,196 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🖥️</div>
+    <div>
+      <h2>Core Server Systems & Infrastructure Administration</h2>
+      <p class="section-subtitle">
+        Comprehensive technical guides: Windows Server Core, Linux administration, systemd, storage, Active Directory, GPO, DNS, and DHCP.
+      </p>
+    </div>
+  </div>
+
+  <!-- Chapter Selector Pills -->
+  <div class="chapter-pills-bar">
+    @for (chap of tutorialChapters; track chap.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-gold]="selectedChapterId() === chap.id"
+        [class.btn-ghost]="selectedChapterId() !== chap.id"
+        (click)="selectChapter(chap.id)">
+        Part {{ chap.chapterNumber }}: {{ chap.title.split('&')[0] }}
+      </button>
+    }
+  </div>
+
+  @let activeChap = currentChapter();
+  <div class="flip7-card" [ngClass]="'accent-' + activeChap.badgeColor" style="margin-top: 20px;">
+    <div class="card-title-row">
+      <div>
+        <span class="badge" [ngClass]="'badge-' + activeChap.badgeColor">Technical Guide: Part {{ activeChap.chapterNumber }}</span>
+        <h3 style="margin-top: 8px;">{{ activeChap.title }}</h3>
+      </div>
+    </div>
+
+    <p class="lead-text" style="margin-top: 12px;">{{ activeChap.summary }}</p>
+
+    <div class="target-box" style="margin-top: 14px;">
+      <strong>Infrastructure Context & Role:</strong>
+      <p style="margin: 4px 0 0 0;">{{ activeChap.architectureContext }}</p>
+    </div>
+
+    <!-- Core Concepts -->
+    <h4 style="margin: 24px 0 10px 0;">Key Engineering Concepts:</h4>
+    <ul class="clean-list">
+      @for (concept of activeChap.coreConcepts; track concept) {
+        <li>{{ concept }}</li>
+      }
+    </ul>
+
+    <!-- Step-by-Step Configuration Guide -->
+    <h4 style="margin: 28px 0 14px 0;">Step-by-Step Implementation Procedures:</h4>
+    @for (st of activeChap.stepByStepGuide; track st.step) {
+      <div class="deployment-step-block">
+        <div class="step-header-bar">
+          <span class="step-num-badge">Step {{ st.step }}</span>
+          <h4>{{ st.title }}</h4>
+          <button
+            class="btn-pill btn-sm btn-ghost"
+            (click)="copy(st.commands, 'chap-' + activeChap.id + '-' + st.step)">
+            {{ tutorialService.copiedSnippet() === 'chap-' + activeChap.id + '-' + st.step ? '✓ Copied' : 'Copy Commands' }}
+          </button>
+        </div>
+
+        <p style="margin: 8px 0 4px 0;">{{ st.description }}</p>
+
+        <div class="code-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot-coral"></span>
+              <span class="dot-gold"></span>
+              <span class="dot-teal"></span>
+            </div>
+            <span class="terminal-title">SHELL COMMANDS</span>
+            <button
+              class="copy-btn"
+              (click)="copy(st.commands, 'chap-' + activeChap.id + '-' + st.step)">
+              Copy
+            </button>
+          </div>
+          <pre><code>{{ st.commands }}</code></pre>
+        </div>
+
+        <p class="step-explanation-text"><strong>Technical Explanation:</strong> {{ st.explanation }}</p>
+      </div>
+    }
+
+    <!-- Configuration Files -->
+    @if (activeChap.configurationFiles.length > 0) {
+      <h4 style="margin: 28px 0 12px 0;">Production Configuration Files:</h4>
+      @for (cfg of activeChap.configurationFiles; track cfg.fileName; let i = $index) {
+        <div class="flip7-card accent-gold" style="margin-bottom: 16px;">
+          <div class="card-title-row">
+            <div>
+              <strong>{{ cfg.fileName }}</strong>
+              <span class="text-muted" style="margin-left: 8px; font-family: var(--font-mono); font-size: 0.85rem;">({{ cfg.path }})</span>
+            </div>
+            <button
+              class="btn-pill btn-sm btn-gold"
+              (click)="copy(cfg.content, 'cfg-file-' + i)">
+              {{ tutorialService.copiedSnippet() === 'cfg-file-' + i ? '✓ Copied' : 'Copy File' }}
+            </button>
+          </div>
+          <div class="code-terminal" style="margin-top: 10px;">
+            <pre><code>{{ cfg.content }}</code></pre>
+          </div>
+          <p class="text-muted" style="font-size: 0.88rem; margin: 6px 0 0 0;">{{ cfg.notes }}</p>
+        </div>
+      }
+    }
+
+    <!-- Ports and Firewall Rules Table -->
+    <h4 style="margin: 28px 0 10px 0;">Default Ports & Firewall Filtering Requirements:</h4>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Port / Protocol</th>
+            <th>Service Description</th>
+            <th>Firewall Rule Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of activeChap.portsAndFirewall; track p.port) {
+            <tr>
+              <td><code>{{ p.port }}</code></td>
+              <td>{{ p.service }}</td>
+              <td>{{ p.rule }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Verification Commands -->
+    <h4 style="margin: 28px 0 10px 0;">Verification & Health Diagnostics:</h4>
+    <div class="table-responsive">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Verification Command</th>
+            <th>Expected Normal Output</th>
+            <th>Diagnostic Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (v of activeChap.verificationCommands; track v.command) {
+            <tr>
+              <td><code>{{ v.command }}</code></td>
+              <td><code>{{ v.expectedOutput }}</code></td>
+              <td>{{ v.meaning }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Hardening & Troubleshooting Grid -->
+    <div class="two-col-grid" style="margin-top: 24px;">
+      <div class="flip7-card accent-coral">
+        <h4>🔒 Production Hardening Best Practices</h4>
+        <ul class="clean-list" style="margin-top: 10px;">
+          @for (h of activeChap.productionHardening; track h) {
+            <li>🛡️ {{ h }}</li>
+          }
+        </ul>
+      </div>
+
+      <div class="flip7-card accent-teal">
+        <h4>🔧 Troubleshooting Scenarios</h4>
+        <div class="mistakes-list" style="margin-top: 10px;">
+          @for (sc of activeChap.troubleshootingScenarios; track sc.symptom) {
+            <div class="mistake-item">
+              <strong>Symptom:</strong> {{ sc.symptom }}<br>
+              <strong>Root Cause:</strong> {{ sc.rootCause }}<br>
+              <strong>Resolution:</strong> {{ sc.resolution }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Hands-On Lab Exercise -->
+    <div class="flip7-card accent-gold" style="margin-top: 24px;">
+      <h4>🧪 Hands-On Lab Exercise</h4>
+      <p><strong>Objective:</strong> {{ activeChap.handsOnLab.objective }}</p>
+      <div class="target-box" style="margin-top: 10px;">
+        <strong>Hands-On Tasks:</strong>
+        <ul class="clean-list" style="margin-top: 6px;">
+          @for (t of activeChap.handsOnLab.tasks; track t) {
+            <li>🔧 {{ t }}</li>
+          }
+        </ul>
+      </div>
+      <p style="margin-top: 12px;"><strong>Validation Check:</strong> {{ activeChap.handsOnLab.validationCheck }}</p>
+    </div>
+  </div>
+</section>

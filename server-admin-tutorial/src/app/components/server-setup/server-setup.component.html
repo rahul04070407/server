@@ -1,0 +1,86 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🛠️</div>
+    <div>
+      <h2>Step-by-Step Server Setup From Scratch</h2>
+      <p class="section-subtitle">
+        Follow these 5 progressive milestones to turn a fresh machine into a secured, functioning production server with a web portal and database.
+      </p>
+    </div>
+  </div>
+
+  <div class="step-pills-bar">
+    @for (s of steps; track s.stepNumber) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-coral]="selectedStep().stepNumber === s.stepNumber"
+        [class.btn-ghost]="selectedStep().stepNumber !== s.stepNumber"
+        (click)="selectStep(s.stepNumber)">
+        Step {{ s.stepNumber }}: {{ s.title.split(' ')[0] }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedStep();
+  <div class="flip7-card">
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">Milestone Step {{ active.stepNumber }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    <div class="concept-banner">
+      <span class="concept-icon">💡</span>
+      <div class="concept-text">
+        <strong>{{ active.analogy }}</strong>
+      </div>
+    </div>
+
+    <p class="objective-text"><strong>🎯 Goal:</strong> {{ active.objective }}</p>
+
+    <!-- Side by Side / Stacked OS Implementation Command Blocks -->
+    <div class="os-command-grid">
+      <!-- Linux Block -->
+      <div class="os-box os-linux">
+        <div class="os-box-header">
+          <span>🐧 Option A: Enterprise Linux (Ubuntu Server LTS)</span>
+          <button
+            class="btn-pill btn-sm btn-ghost"
+            (click)="copy(active.linuxCommand, 'setup-linux-' + active.stepNumber)">
+            {{ tutorialService.copiedSnippet() === 'setup-linux-' + active.stepNumber ? '✓ Copied' : 'Copy Linux' }}
+          </button>
+        </div>
+        <div class="code-terminal">
+          <pre><code>{{ active.linuxCommand }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Windows Block -->
+      <div class="os-box os-windows">
+        <div class="os-box-header">
+          <span>🪟 Option B: Windows Server Core (PowerShell)</span>
+          <button
+            class="btn-pill btn-sm btn-ghost"
+            (click)="copy(active.windowsCommand, 'setup-win-' + active.stepNumber)">
+            {{ tutorialService.copiedSnippet() === 'setup-win-' + active.stepNumber ? '✓ Copied' : 'Copy PowerShell' }}
+          </button>
+        </div>
+        <div class="code-terminal">
+          <pre><code>{{ active.windowsCommand }}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Architectural Deep Dive Explanation -->
+    <div class="explanation-box">
+      <strong>🔍 Technical Deep Dive:</strong>
+      <p style="margin: 4px 0 0 0;">{{ active.explanation }}</p>
+    </div>
+
+    <!-- Verification Check Runbook -->
+    <div class="verification-box">
+      <strong>✅ How to Verify It Worked:</strong>
+      <p style="margin: 4px 0 0 0;">{{ active.verificationCheck }}</p>
+    </div>
+  </div>
+</section>

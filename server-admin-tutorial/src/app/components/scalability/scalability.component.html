@@ -1,0 +1,106 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">📈</div>
+    <div>
+      <h2>Scalability & High Traffic Architecture</h2>
+      <p class="section-subtitle">
+        Learn how systems scale from 1,000 to 1,000,000+ visitors using Vertical vs Horizontal scaling, Load Balancers, Redis Caching, and Database Read Replicas.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic-pills-bar">
+    @for (t of topics; track t.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-gold]="selectedTopic().id === t.id"
+        [class.btn-ghost]="selectedTopic().id !== t.id"
+        (click)="selectTopic(t.id)">
+        {{ t.title.split('(')[0] }}
+      </button>
+    }
+  </div>
+
+  @let active = selectedTopic();
+  <div class="flip7-card">
+    <div class="card-title-row">
+      <span class="badge" [ngClass]="'badge-' + active.badgeColor">{{ active.badge }}</span>
+      <h3>{{ active.title }}</h3>
+    </div>
+
+    <!-- Natural Analogy Banner -->
+    @if (active.analogy) {
+      <div class="concept-banner">
+        <span class="concept-icon">💡</span>
+        <div class="concept-text">
+          <strong>{{ active.analogy.title }}:</strong> {{ active.analogy.description }}
+        </div>
+      </div>
+    }
+
+    <p class="headline-text">{{ active.headline }}</p>
+
+    <!-- Architecture ASCII Diagram (if present) -->
+    @if (active.architectureDiagram) {
+      <div class="section-subheading">
+        <h4>📐 Scaling Architecture Blueprint</h4>
+      </div>
+      <div class="code-terminal" style="background: #0E171E;">
+        <pre style="color: #64D2FF; font-weight: 600;"><code>{{ active.architectureDiagram }}</code></pre>
+      </div>
+    }
+
+    <!-- Concepts Grid -->
+    <div class="section-subheading">
+      <h4>⚖️ Architecture Options & Trade-Offs</h4>
+    </div>
+    <div class="concepts-grid">
+      @for (c of active.concepts; track c.name) {
+        <div class="concept-card">
+          <h5>{{ c.name }}</h5>
+          <p class="concept-desc">{{ c.description }}</p>
+
+          <div class="pros-cons-row">
+            <div class="pro-box">
+              <strong>✅ Advantages:</strong>
+              <ul>
+                @for (p of c.pros; track p) {
+                  <li>{{ p }}</li>
+                }
+              </ul>
+            </div>
+            <div class="con-box">
+              <strong>⚠️ Trade-Offs:</strong>
+              <ul>
+                @for (con of c.cons; track con) {
+                  <li>{{ con }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Practical Code Snippet (if present) -->
+    @if (active.practicalCodeSnippet) {
+      <div class="section-subheading">
+        <h4>💻 {{ active.practicalCodeSnippet.title }}</h4>
+      </div>
+      <div class="code-terminal" style="background: #0E171E;">
+        <pre style="color: #64D2FF;"><code>{{ active.practicalCodeSnippet.code }}</code></pre>
+      </div>
+      <p class="snippet-notes">💡 <strong>Why this works:</strong> {{ active.practicalCodeSnippet.notes }}</p>
+    }
+
+    <!-- Key Takeaways -->
+    <div class="takeaways-box" style="margin-top: 12px;">
+      <strong>🎯 Architecture Rules of Thumb:</strong>
+      <ul class="clean-list" style="margin-top: 6px;">
+        @for (item of active.keyTakeaways; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>

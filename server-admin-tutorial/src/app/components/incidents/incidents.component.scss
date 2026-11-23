@@ -1,0 +1,210 @@
+.filter-pills-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.incidents-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .incident-select-card {
+    background: #FFFFFF;
+    border: 2px solid rgba(43, 168, 162, 0.2);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+
+    &:hover {
+      border-color: var(--coral);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      border-color: var(--coral);
+      background: #FFF9F7;
+      box-shadow: var(--shadow-coral-glow);
+    }
+
+    .ticket-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .inc-card-title {
+      font-size: 0.95rem;
+      margin: 6px 0;
+      color: var(--text-main);
+    }
+
+    .inc-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+}
+
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-callout {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &.callout-security {
+    background: #FEECE7;
+    border: 1px solid var(--coral);
+    color: #6C2210;
+  }
+
+  &.callout-troubleshoot {
+    background: #FFF8E7;
+    border: 1px solid var(--accent-dark);
+    color: #554100;
+  }
+}
+
+.triage-step-card {
+  background: var(--surface-base);
+  border: 1px solid rgba(43, 168, 162, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+
+  .triage-step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    .step-num-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--coral);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .triage-step-titles {
+      h5 {
+        font-size: 1.05rem;
+        margin: 0;
+      }
+      .step-action {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        margin: 2px 0 0 0;
+      }
+    }
+  }
+
+  .output-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 10px 0;
+
+    @media (max-width: 680px) {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .out-col {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      code {
+        display: block;
+        font-size: 0.8rem;
+        word-break: break-all;
+      }
+
+      &.out-normal {
+        background: #E8F8F5;
+        border: 1px solid #A2D9CE;
+        color: #117864;
+      }
+
+      &.out-abnormal {
+        background: #FDEDEC;
+        border: 1px solid #F5B7B1;
+        color: #943126;
+      }
+    }
+  }
+
+  .interpretation-note {
+    background: #FFFFFF;
+    border: 1px solid rgba(43, 168, 162, 0.3);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.86rem;
+  }
+}
+
+.rca-box {
+  background: var(--cream);
+  border: 2px solid var(--primary-dark);
+  border-radius: var(--radius-md);
+  padding: 20px;
+
+  h4 {
+    margin: 0;
+    color: var(--primary-dark);
+  }
+  p {
+    margin: 6px 0 0 0;
+  }
+}

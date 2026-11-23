@@ -1,0 +1,82 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🚀</div>
+    <div>
+      <h2>Production Application Deployments</h2>
+      <p class="section-subtitle">
+        End-to-end production hosting runbooks for Angular, Node.js Express, Java Spring Boot, and Full-Stack systems.
+      </p>
+    </div>
+  </div>
+
+  <div class="deployment-pills-bar">
+    @for (dep of deployments; track dep.id) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-sky]="selectedDeploymentId() === dep.id"
+        [class.btn-ghost]="selectedDeploymentId() !== dep.id"
+        (click)="selectDeployment(dep.id)">
+        {{ dep.technology.split('+')[0] }}
+      </button>
+    }
+  </div>
+
+  @let activeDep = currentDeployment();
+  <div class="flip7-card" [ngClass]="'accent-' + activeDep.badgeColor" style="margin-top: 20px;">
+    <div class="card-title-row">
+      <div>
+        <span class="badge" [ngClass]="'badge-' + activeDep.badgeColor">{{ activeDep.targetOS }}</span>
+        <h3 style="margin-top: 6px;">{{ activeDep.title }}</h3>
+      </div>
+    </div>
+    <p class="lead-text" style="margin-top: 10px;">{{ activeDep.architectureSummary }}</p>
+
+    <div class="target-box" style="margin-top: 14px;">
+      <strong>Prerequisites:</strong>
+      <ul class="clean-list" style="margin-top: 6px;">
+        @for (pre of activeDep.prerequisites; track pre) {
+          <li>✔️ {{ pre }}</li>
+        }
+      </ul>
+    </div>
+
+    <h4 style="margin: 28px 0 14px 0;">Step-by-Step Implementation Runbook:</h4>
+    @for (st of activeDep.steps; track st.step) {
+      <div class="deployment-step-block">
+        <div class="step-header-bar">
+          <span class="step-num-badge">Step {{ st.step }}</span>
+          <h4>{{ st.title }}</h4>
+          <button
+            class="btn-pill btn-sm btn-ghost"
+            (click)="copy(st.commandOrConfig, 'dep-' + activeDep.id + '-' + st.step)">
+            {{ tutorialService.copiedSnippet() === 'dep-' + activeDep.id + '-' + st.step ? '✓ Copied' : 'Copy' }}
+          </button>
+        </div>
+
+        <div class="code-terminal">
+          <pre><code>{{ st.commandOrConfig }}</code></pre>
+        </div>
+
+        <p class="step-explanation-text"><strong>Technical Function:</strong> {{ st.explanation }}</p>
+      </div>
+    }
+
+    <h4 style="margin: 28px 0 10px 0;">✅ Production Readiness Checklist:</h4>
+    <ul class="clean-list" style="margin-bottom: 24px;">
+      @for (chk of activeDep.productionChecklist; track chk) {
+        <li>🛡️ {{ chk }}</li>
+      }
+    </ul>
+
+    <h4>⚠️ Common Deployment Errors & Resolutions:</h4>
+    <div class="mistakes-list" style="margin-top: 12px;">
+      @for (sc of activeDep.troubleshootingScenarios; track sc.symptom) {
+        <div class="mistake-item">
+          <strong>Symptom:</strong> {{ sc.symptom }}<br>
+          <strong>Root Cause:</strong> {{ sc.cause }}<br>
+          <strong>Resolution:</strong> {{ sc.fix }}
+        </div>
+      }
+    </div>
+  </div>
+</section>

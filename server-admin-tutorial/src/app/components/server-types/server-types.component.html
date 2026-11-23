@@ -1,0 +1,118 @@
+<section class="tab-section">
+  <div class="section-header-dashed">
+    <div class="section-icon-badge">🖥️</div>
+    <div>
+      <h2>Master All 60 Enterprise Server Types</h2>
+      <p class="section-subtitle">
+        Comprehensive reference covering roles, default ports, configs, hardening, and inter-server communication.
+      </p>
+    </div>
+  </div>
+
+  <!-- Category Filters -->
+  <div class="filter-pills-bar">
+    @for (cat of serverCategories; track cat) {
+      <button
+        class="btn-pill btn-sm"
+        [class.btn-teal]="selectedServerCategory() === cat"
+        [class.btn-ghost]="selectedServerCategory() !== cat"
+        (click)="setServerCategory(cat)">
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <!-- Server Types Grid (All 60 Items) -->
+  <div class="servers-grid">
+    @for (server of filteredServerTypes(); track server.id) {
+      <div
+        class="flip7-card server-card"
+        [ngClass]="'accent-' + server.badgeColor"
+        (click)="openServerDetail(server)">
+        <div class="server-card-top">
+          <span class="server-id-badge">#{{ server.id }}</span>
+          <span class="badge" [ngClass]="'badge-' + server.badgeColor">{{ server.category }}</span>
+        </div>
+        <h4 class="server-card-name">{{ server.name }}</h4>
+        <p class="server-card-purpose">{{ server.purpose }}</p>
+
+        <div class="server-ports-bar">
+          @for (port of server.defaultPorts; track port) {
+            <span class="port-tag">🔌 {{ port }}</span>
+          }
+        </div>
+
+        <div class="card-footer-cta">
+          <span class="view-detail-link">Inspect Architecture & Config →</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Server Type Deep-Dive Modal / Overlay -->
+  @if (selectedServerDetail(); as detail) {
+    <div class="modal-overlay" (click)="closeServerDetail()">
+      <div class="modal-container flip7-card accent-teal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <span class="server-id-badge">Server Type #{{ detail.id }}</span>
+            <h3>{{ detail.name }}</h3>
+            <span class="badge badge-teal">{{ detail.category }}</span>
+          </div>
+          <button class="close-modal-btn" (click)="closeServerDetail()">✕</button>
+        </div>
+
+        <div class="modal-body-content">
+          <div class="modal-info-block">
+            <strong>🎯 Purpose & Technical Function:</strong>
+            <p>{{ detail.purpose }}</p>
+          </div>
+
+          <div class="modal-info-block">
+            <strong>🏛️ Enterprise Architecture Role:</strong>
+            <p>{{ detail.architectureRole }}</p>
+          </div>
+
+          <div class="modal-info-block">
+            <strong>🔌 Default Ports & Protocols:</strong>
+            <div class="ports-list-modal">
+              @for (p of detail.defaultPorts; track p) {
+                <span class="port-tag-lg">{{ p }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="modal-info-block">
+            <div class="card-title-row">
+              <strong>💻 Primary Configuration / Diagnostic Snippet:</strong>
+              <button
+                class="copy-btn"
+                (click)="copy(detail.keyConfigSnippet, 'srv-' + detail.id)">
+                {{ tutorialService.copiedSnippet() === 'srv-' + detail.id ? 'Copied' : 'Copy' }}
+              </button>
+            </div>
+            <div class="code-terminal">
+              <pre><code>{{ detail.keyConfigSnippet }}</code></pre>
+            </div>
+          </div>
+
+          <div class="two-col-grid" style="margin-top: 14px;">
+            <div class="detail-callout callout-security">
+              <strong>🔒 Security & Hardening:</strong>
+              <p>{{ detail.securityHardening }}</p>
+            </div>
+            <div class="detail-callout callout-troubleshoot">
+              <strong>🔧 Troubleshooting Runbook Tip:</strong>
+              <p>{{ detail.troubleshootingTip }}</p>
+            </div>
+          </div>
+
+          <div class="detail-callout callout-comm" style="margin-top: 14px;">
+            <strong>🌐 Inter-Server Communication Protocols:</strong>
+            <p>{{ detail.interServerCommunication }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>
